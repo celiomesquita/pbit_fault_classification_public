@@ -1,0 +1,58 @@
+{
+  "protocol_id": "RESS-2026-10-10-v1",
+  "frozen_at_utc": "2026-10-10T21:29:54Z",
+  "git_head": "a20a73360cded81f2f100cdd9cc7105e3d76c827",
+  "working_tree": "modified; relevant_file_hashes_are_authoritative",
+  "environment": {
+    "python": "3.14.0",
+    "numpy": "2.4.0",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0"
+  },
+  "input_sha256": {
+    "protocols/ress_revision_v1.json": "a3b2d9608f96672ae52960e2fc4dc8b6902f59e4fe45d5dd2711c202207131c0",
+    "data/audit_dataset_r1.csv": "b3a524fdd9cdbe1bd5fee0aae42fd7f934de1dc5a14b99ddc9fc74221dc34006",
+    "data/PBIT_features_r1.csv": "daa7ad12b042841fbb9a55e9b06d33b635fec9a8235dfbf9908c4770b9c3732b",
+    "data/train_real.csv": "10064787cf5ac77edb0527671e157dd0796de89d7bf3988d559f3c02475cf5ff",
+    "data/test_real.csv": "14ba3a5cfe9e364af38e4cdf6f249ced6529f80ad40933f344fb1cb15afcab8f",
+    "data/PBIT_atuador_DESCARAC_r1_long.csv": "25240cea542668d66323b807f0304c9badfb09c065e2f740aa5f6d46f24c6177",
+    "data/PBIT_atuador_DESCARAC_r1_long_clean.csv": "257a0da8a0425ba9f35989f9c4b30304b8684fd2cf718c8f8c136d179da07f3e",
+    "src/pbit/features.py": "279a48f18ccdca11a8b02c20855b5c084ffd0718733e314c7c3cfe644578c0d7",
+    "src/pbit/modeling.py": "48c18433869260d603bc5983bcf32713ebf49f0c62f341e68b6e8b5a0a731357",
+    "src/pbit/augmentation.py": "2fa9cdea283df4b465d4f3e4daaaf0f17aaef79efa6e93795cab63c156fbd5bc",
+    "scripts/freeze_ress_revision.py": "f22d37bf78563decbf2395808002326648ea952c9e311afd99b983c46df068d0"
+  },
+  "output_sha256": {
+    "data/ress_revision/freeze_v1/cycle_manifest.csv": "b920f3ecf7de5e0e16fadcc7c858ee07c19d55fe9426e8f51d10e1e783418c89",
+    "data/ress_revision/freeze_v1/features_primary.csv": "52a64e0e80a02737c8d987fca6da8550a73eb0f91473f0f4152444d0e3f374a5",
+    "data/ress_revision/freeze_v1/fold_coverage.csv": "d4684d36ea0fca46f886e7010a212d5e4adb2664e527d1bf63029f21a1ed0f27",
+    "data/ress_revision/freeze_v1/historical_test_primary.csv": "6ff8e015b1d5b24405e8cbf7b91f9785e6b2606f2e9eda4d986dded9798b3890",
+    "data/ress_revision/freeze_v1/inner_assignment.csv": "1aa7722c8f3a237fc49d5d99c8d7ec5d06ebb8d2fef0ce14eebf58758af09a57",
+    "data/ress_revision/freeze_v1/long_primary.csv": "2b89367e7ad1a6be6e1a07fd8d54fd2045967420831778915e8e6d8ea2d6dcd4",
+    "data/ress_revision/freeze_v1/outer_assignment.csv": "7d6f3119095d1b347c5a9981e8697e47d92fec416b5a9e4ad5c4e64f63e5542c",
+    "data/ress_revision/freeze_v1/population_counts.csv": "c8fbb3632ba6108de11d45b8afeb067b2daddb46116b9ac4cd9c5ca234853f48",
+    "data/ress_revision/freeze_v1/train_primary.csv": "9a2680899a658c804709f98ec1d2410ad90cfca39d8b86fc4f6929972cd5fa62"
+  },
+  "checks": {
+    "metadata_consistent": true,
+    "historical_feature_values_within_csv_roundoff": true,
+    "maximum_absolute_historical_feature_delta": 4.547473508864641e-13,
+    "canonical_feature_source": "data/PBIT_features_r1.csv",
+    "historical_test_units_preserved": true,
+    "all_fold_unit_boundaries_disjoint": true,
+    "primary_cycles": 1487,
+    "primary_units": 65,
+    "train_cycles": 1195,
+    "train_units": 54,
+    "historical_test_cycles": 292,
+    "historical_test_units": 11,
+    "outer_assignment_rows": 11950,
+    "inner_assignment_rows": 47800
+  },
+  "coverage_warnings": {
+    "outer_evaluations_without_F06": 20,
+    "inner_training_sets_without_F06": 0,
+    "inner_validations_without_severity3": 0
+  }
+}

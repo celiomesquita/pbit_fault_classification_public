@@ -1,0 +1,10 @@
+Type,Description,Tests,Severity Index
+N01,Normal operational condition 1,586,0
+N02,Normal operational condition 2,67,0
+F01,Excessive damping,161,1
+F02,Foreign object coupling,320,2
+F03,Actuation assembly failure,267,3
+F04,Actuation surface damage 1,39,2
+F05,Actuation surface damage 2,41,2
+F06,Command transmission failure,9,3
+Total,,1490,-

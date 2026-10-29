@@ -1,0 +1,12 @@
+# Versions used in the analyses of the October 2026 revision (Python 3.14.0, Windows 11).
+# Core versions were read from the installed packages on 2026-10-09; install with: pip install -r requirements_analysis.txt
+numpy==2.4.0
+pandas==2.3.3
+scipy==1.17.1
+scikit-learn==1.8.0
+lightgbm==4.6.0
+xgboost==3.2.0
+optuna==4.8.0
+imbalanced-learn==0.14.2
+smote-variants==1.0.1
+# Test and plotting extras: pytest==9.1.1, matplotlib==3.11.2, tabulate
