@@ -19,6 +19,7 @@ frozen experimental protocols and the unit tests. Manuscript sources are not inc
 | `tests/` | Unit tests (`python -m pytest tests`) |
 | `docs/protocolos/` | Protocols frozen before each experiment (in Portuguese), with amendments |
 | `paper/` | Empty output folders where table and figure scripts write their results |
+| `supplementary/` | Supplementary Material of the article (PDF): complete methodological details, results summarised in the main text and sensitivity analyses |
 
 ## Data
 
