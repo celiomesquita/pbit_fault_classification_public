@@ -315,7 +315,8 @@ def check_reproduction(a, c):
 
 
 def main():
-    assert sha(PROTOCOL) == "ccfbff8f4144183631c06b1751bfb63497b259c56dc381709e36eed5a97a4c9d", "protocol changed"
+    text_hash = hashlib.sha256(PROTOCOL.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    assert text_hash == "ccfbff8f4144183631c06b1751bfb63497b259c56dc381709e36eed5a97a4c9d", "protocol changed"
     OUT.mkdir(parents=True, exist_ok=True)
     weights_cache: dict = {}
 
