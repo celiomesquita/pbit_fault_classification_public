@@ -95,6 +95,7 @@ protocols in `docs/protocolos/`.
 | Calibration of the inferential procedures (coverage assessments) | `cluster_*.py`, `run_cluster_coverage_parallel.py`, `verify_cluster_coverage.py`, `plot_cluster_coverage.py`, `reanalyze_inference.py` |
 | Audited-population rerun (E7) and SMOTEWB reproduction (E8) | `run_e7.py`, `e7_compare.py`, `e8_smotewb.py`, `e8_summary.py` |
 | Sensitivity to margins, fixed hyperparameters and seeds | `margin_sensitivity.py`, `hyperparameter_sensitivity*.py` |
+| Sensitivity to the set of critical classes (E17) | `e17_severity_sensitivity.py`, `e17_verify.py` (reuse the saved predictions of the experiments above) |
 
 Some verification scripts also hash files of the authors' internal audit trail (manifests and
 records) that are not part of this package; those checks fail on the missing files, which does
