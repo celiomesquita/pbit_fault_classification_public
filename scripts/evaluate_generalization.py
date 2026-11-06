@@ -19,7 +19,7 @@ METRICS = ["auc", "recall_20", "false_alarm_20", "critical_miss_20", "recall_10"
 
 
 def load_all():
-    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_v3.csv")
     return df.merge(pd.read_csv(base.RAIZ / "dados" / "pbit_spectral_features_v3.csv"), on="experimento_idx", validate="one_to_one")
 
 

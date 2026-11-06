@@ -18,7 +18,7 @@ import train_binary_model as model  # noqa: E402
 class BinaryModelTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+        cls.df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_v3.csv")
         cls.sets = model.build_feature_sets(cls.df)
 
     def test_target_maps_normal_and_failure(self):

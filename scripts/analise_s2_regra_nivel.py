@@ -7,7 +7,7 @@ from sklearn.metrics import roc_auc_score
 import experimentos_base as b
 from experimento_s2_ablacao import K_REF
 
-d = pd.read_csv(b.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+d = pd.read_csv(b.RAIZ / "dados" / "pbit_features_v3.csv")
 FALHAS = b.CLASSES[2:]
 LIMIARES = (0.005, 0.01, 0.02, 0.03, 0.05)
 pd.set_option("display.width", 200)

@@ -23,7 +23,7 @@ COMPARADAS = ["recall_falha", "recall_falha_sem_F06", "macro_recall", "macro_rec
 
 
 def carregar():
-    d = pd.read_csv(b.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    d = pd.read_csv(b.RAIZ / "dados" / "pbit_features_v3.csv")
     Xdf = d[list(d.columns[3:])].copy()
     for c in b.LOG:
         Xdf[c] = np.log10(Xdf[c])

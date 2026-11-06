@@ -73,7 +73,7 @@ def evaluate(X, y, groups, name, rng):
 
 
 def main():
-    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_v3.csv")
     df = df[df["condicao"].isin(["N01", "F02"])].reset_index(drop=True)
     signals = spectral.load_signals(df["experimento_idx"].tolist())
     y = (df["condicao"].values == "F02").astype(int)

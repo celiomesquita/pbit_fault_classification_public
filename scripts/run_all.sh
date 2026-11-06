@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
-# Rebuild the audited data from the two input files and run every experiment, in dependency order.
+# Run every experiment from dataset version 3, in dependency order.
 # Usage: bash scripts/run_all.sh. Set PYTHON if the interpreter is not called python.
 set -eu
 cd "$(dirname "$0")"
 PYTHON="${PYTHON:-python}"
 
-# Data audit
-"$PYTHON" limpar_dados.py
-"$PYTHON" auditar_continuidade.py
-"$PYTHON" aplicar_reatribuicoes.py
-"$PYTHON" gerar_v2.py
-"$PYTHON" gerar_v3.py
 "$PYTHON" build_spectral_features.py
 
 # Leakage, controls, hierarchy and feature removal

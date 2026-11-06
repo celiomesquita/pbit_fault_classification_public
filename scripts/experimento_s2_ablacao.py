@@ -137,7 +137,7 @@ def identificar_sn(X, g):
 
 if __name__ == "__main__":
     b.SAIDA.mkdir(exist_ok=True)
-    d = pd.read_csv(b.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    d = pd.read_csv(b.RAIZ / "dados" / "pbit_features_v3.csv")
     F = list(d.columns[3:])
     B_COL = [c for c in F if c not in NIVEL]
     C_COL = B_COL + RELATIVAS

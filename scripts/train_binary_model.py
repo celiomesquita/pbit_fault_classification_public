@@ -259,7 +259,7 @@ def save_final_model(name, params, X_frame, y, output):
 
 
 def load_data(exclude_f02):
-    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_v3.csv")
     if USE_SPECTRAL:
         df = df.merge(pd.read_csv(base.RAIZ / "dados" / "pbit_spectral_features_v3.csv"), on="experimento_idx", validate="one_to_one")
     return df[df["condicao"] != "F02"].reset_index(drop=True) if exclude_f02 else df

@@ -225,7 +225,7 @@ def auc(pred):
 
 if __name__ == "__main__":
     SAIDA.mkdir(exist_ok=True)
-    d = pd.read_csv(RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    d = pd.read_csv(RAIZ / "dados" / "pbit_features_v3.csv")
     F = list(d.columns[3:])
     Xdf = d[F].copy()
     for c in LOG:

@@ -24,7 +24,7 @@ def out_of_fold(name, X, y, groups, seed):
 
 
 def main():
-    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_corrigido_v3.csv")
+    df = pd.read_csv(base.RAIZ / "dados" / "pbit_features_v3.csv")
     spectral = pd.read_csv(base.RAIZ / "dados" / "pbit_spectral_features_v3.csv")
     relative = model.build_feature_sets(df)["D"]
     frequency = spectral.drop(columns="experimento_idx")

@@ -10,10 +10,10 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW_PATH = ROOT / "dados" / "PBIT_atuador_DESCARAC_r1_long.csv"
+SIGNALS_PATH = ROOT / "dados" / "pbit_signals_v3.csv"
 OUTPUT_PATH = ROOT / "dados" / "pbit_spectral_features_v3.csv"
 N_SAMPLES = 123
-FEATURES_PATH = ROOT / "dados" / "pbit_features_corrigido_v3.csv"
+FEATURES_PATH = ROOT / "dados" / "pbit_features_v3.csv"
 
 
 def spectrum(signals):
@@ -56,9 +56,9 @@ def descriptors(signals):
 
 
 def load_signals(indices):
-    raw = pd.read_csv(RAW_PATH, encoding="utf-8-sig")
-    raw = raw[raw["Experiment_Index"].isin(indices)]
-    wide = raw.pivot(index="Experiment_Index", columns="Sample_Index", values="Measurement").reindex(index=indices, columns=range(1, N_SAMPLES + 1))
+    raw = pd.read_csv(SIGNALS_PATH)
+    raw = raw[raw["experimento_idx"].isin(indices)]
+    wide = raw.pivot(index="experimento_idx", columns="sample_index", values="value").reindex(index=indices, columns=range(1, N_SAMPLES + 1))
     return wide.interpolate(axis=1, limit_direction="both").values
 
 

@@ -1,15 +1,15 @@
-# Power-on built-in test of airborne actuators: leakage, label audit and frequency descriptors
+# Power-on built-in test of airborne actuators: leakage and frequency descriptors
 
-Reproducibility package for the article *From Recognising the Unit to Classifying its Condition: Leakage, Label Audit and Frequency Descriptors in Power-On Built-In Test of Airborne Actuators* (provisional title, under preparation), by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory (AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
+Reproducibility package for the article *From Recognising the Unit to Classifying its Condition: Leakage and Frequency Descriptors in Power-On Built-In Test of Airborne Actuators* (provisional title, under preparation), by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory (AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
 
-The package contains the anonymised data, the analysis code, the acceptance criteria and the unit tests. Manuscript sources are not included.
+The package contains the anonymised dataset, the analysis code, the acceptance criteria and the unit tests. Manuscript sources are not included.
 
 ## Contents
 
 | Folder | Content |
 |---|---|
-| `dados/` | Input data, audited versions and audit logs |
-| `scripts/` | Audit, experiment and verification scripts |
+| `dados/` | Dataset version 3 |
+| `scripts/` | Experiment and verification scripts |
 | `tests/` | Unit tests |
 | `resultados/` | Published result tables, for comparison with a new run |
 | `docs/acceptance_criteria.md` | Acceptance criteria fixed before each experiment, and what was amended afterwards |
@@ -18,20 +18,15 @@ Older scripts and file names are in Portuguese (`dados` means data, `resultados`
 
 ## Data
 
-The data cover power-on built-in test (PBIT) cycles of 123 samples from 65 serial-numbered airborne actuators, in eight condition classes. System type and operator identity are anonymised, and serial numbers are recoded (`SN 001`, ...). The physical quantity, the engineering unit and the sampling rate were not disclosed. Numerical results do not depend on the sampling rate.
+Dataset version 3 has 1,472 power-on built-in test (PBIT) cycles of 123 samples from 65 serial-numbered airborne actuators, in eight condition classes. It is the starting point of this work. System type and operator identity are anonymised, and serial numbers are recoded (`SN 001`, ...). The physical quantity, the engineering unit and the sampling rate were not disclosed. Numerical results do not depend on the sampling rate.
 
 | File | Description |
 |---|---|
-| `PBIT_atuador_DESCARAC_r1_long.csv` | Input: raw signals in long format, 1,490 cycles |
-| `pbit_features_completo.csv` | Input: 18 statistics per cycle, 1,486 cycles, as received |
-| `pbit_features_limpo.csv`, `pbit_exclusoes.csv` | 11 cycles with duplicated feature vectors removed, with the log |
-| `pbit_auditoria_continuidade.csv` | Serial-number candidates from the continuity audit |
-| `pbit_features_corrigido.csv`, `pbit_reatribuicoes.csv` | 23 strong serial-number corrections applied, with the log |
-| `pbit_features_corrigido_v2.csv`, `pbit_reclassificacoes.csv`, `pbit_quarentena.csv` | First condition corrections and three quarantined cycles |
-| `pbit_features_corrigido_v3.csv`, `pbit_reclassificacoes_v3.csv` | **Version used in all experiments**: 1,472 cycles, with the remaining condition corrections |
-| `pbit_spectral_features_v3.csv` | Frequency descriptors of version 3 |
+| `pbit_features_v3.csv` | Cycle identifier, serial number, condition and 18 statistics per cycle |
+| `pbit_signals_v3.csv` | The 123 samples of each cycle, in long format; a few samples are missing |
+| `pbit_spectral_features_v3.csv` | Frequency descriptors derived from the signals |
 
-Labels were filled in by hand and have no independent confirmation. Corrections rest on rules defined by the authors and logged cycle by cycle. The severity categories in the article are the authors' working mapping informed by ARP4761A, not an aircraft-level hazard classification.
+Labels have no independent confirmation. F06 is defined by a pattern of the signal, so results for F06 are partly circular. The severity categories in the article are the authors' working mapping informed by ARP4761A, not an aircraft-level hazard classification.
 
 ## Environment
 
@@ -49,11 +44,11 @@ Run everything, from the repository root:
 bash scripts/run_all.sh
 ```
 
-This takes a few hours. It first rebuilds the audited data from the two input files, then runs the experiments in this order:
+This takes a few hours. The scripts run in this order:
 
 | Script (run from `scripts/`) | Purpose |
 |---|---|
-| `limpar_dados.py`, `auditar_continuidade.py`, `aplicar_reatribuicoes.py`, `gerar_v2.py`, `gerar_v3.py`, `build_spectral_features.py` | Data audit, up to version 3 and its frequency descriptors |
+| `build_spectral_features.py` | Frequency descriptors |
 | `experimentos_base.py` | Baselines and splitting strategies (E0 to E3b) |
 | `experimentos_controles_hierarquia.py`, `calcular_cmr.py` | Leakage controls, hierarchy and critical miss rate |
 | `experimento_s2_ablacao.py`, `analise_s2_regra_nivel.py` | Removal of absolute level; exploratory detector relative to each unit's baseline |
@@ -75,7 +70,7 @@ python -m unittest discover tests
 
 ## Scope of the evidence
 
-All data were examined during the audit and there is no external cohort, so the results are internal evidence. F02 was removed from the main model after the results were seen, on the assumption that visual inspection intercepts it; both results are reported. See `docs/acceptance_criteria.md`.
+The same data guided exploration and evaluation, and there is no external cohort, so the results are internal evidence. F02 was removed from the main model after the results were seen, on the assumption that visual inspection intercepts it; both results are reported. See `docs/acceptance_criteria.md`.
 
 ## Citation and contact
 
