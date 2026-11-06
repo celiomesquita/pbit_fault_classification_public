@@ -1,110 +1,82 @@
-# Unit-grouped evaluation of power-on built-in test classifiers for airborne actuators
+# Power-on built-in test of airborne actuators: leakage, label audit and frequency descriptors
 
-Reproducibility package for the article *Unit-Grouped Evaluation of Power-On Built-In Test
-Classifiers for Airborne Actuators: Critical Misses, False Alarms and Independent-Unit Evidence*,
-by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory
-(AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
+Reproducibility package for the article *From Recognising the Unit to Classifying its Condition: Leakage, Label Audit and Frequency Descriptors in Power-On Built-In Test of Airborne Actuators* (provisional title, under preparation), by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory (AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
 
-The package contains the anonymised data needed to rerun the analyses, the analysis code, the
-frozen experimental protocols and the unit tests. Manuscript sources are not included.
+The package contains the anonymised data, the analysis code, the acceptance criteria and the unit tests. Manuscript sources are not included.
 
 ## Contents
 
 | Folder | Content |
 |---|---|
-| `data/` | Anonymised input data (see *Data* below) |
-| `src/pbit/` | Library code: preprocessing, features, splitting, augmentation, modelling, decision and cost-sensitive policies, inference |
-| `scripts/` | Experiment, summary, verification, table and figure scripts |
-| `notebooks/`, `notebooks_safety/` | Original data preparation, modelling and safety-evaluation notebooks |
-| `tests/` | Unit tests (`python -m pytest tests`) |
-| `docs/protocolos/` | Protocols frozen before each experiment (in Portuguese), with amendments |
-| `paper/` | Empty output folders where table and figure scripts write their results |
-| `supplementary/` | Supplementary Material of the article (PDF): complete methodological details, results summarised in the main text and sensitivity analyses |
+| `dados/` | Input data, audited versions and audit logs |
+| `scripts/` | Audit, experiment and verification scripts |
+| `tests/` | Unit tests |
+| `resultados/` | Published result tables, for comparison with a new run |
+| `docs/acceptance_criteria.md` | Acceptance criteria fixed before each experiment, and what was amended afterwards |
+
+Older scripts and file names are in Portuguese (`dados` means data, `resultados` means results); newer code is in English.
 
 ## Data
 
-The dataset covers 1,490 power-on built-in test (PBIT) cycles from 65 serial-numbered units of one
-airborne actuation system, in eight condition classes (two normal, six fault modes). System type
-and operator identity are anonymised; serial numbers are recoded (`SN 001`, ...).
+The data cover power-on built-in test (PBIT) cycles of 123 samples from 65 serial-numbered airborne actuators, in eight condition classes. System type and operator identity are anonymised, and serial numbers are recoded (`SN 001`, ...). The physical quantity, the engineering unit and the sampling rate were not disclosed. Numerical results do not depend on the sampling rate.
 
 | File | Description |
 |---|---|
-| `PBIT_atuador_DESCARAC_r1.csv` | Source table, one column per cycle: rows 1–3 hold class, experiment index and serial number; the following rows hold the ~123 readings |
-| `PBIT_atuador_DESCARAC_r1_long.csv` | Same data in long format: `Experiment_Index`, `Serial_Number`, `Serial_Run_Index`, `Fault_Mode`, `Severity_Index`, `Sample_Index`, `Measurement` |
-| `failure_modes.csv` | Class codes, functional descriptions, cycle counts and severity index |
-| `best_lgbm_params.json`, `best_lgbm_cmr_params.json`, `best_xgb_params.json` | Hyperparameters selected by the historical searches, which fix the tuned configurations used in the article |
-| `ress_revision/freeze_v1/` | Frozen audited population (1,487 cycles), cycle manifest, features and outer/inner grouped fold assignments used by the later experiments; distributed as frozen, since it cannot be regenerated from this package |
+| `PBIT_atuador_DESCARAC_r1_long.csv` | Input: raw signals in long format, 1,490 cycles |
+| `pbit_features_completo.csv` | Input: 18 statistics per cycle, 1,486 cycles, as received |
+| `pbit_features_limpo.csv`, `pbit_exclusoes.csv` | 11 cycles with duplicated feature vectors removed, with the log |
+| `pbit_auditoria_continuidade.csv` | Serial-number candidates from the continuity audit |
+| `pbit_features_corrigido.csv`, `pbit_reatribuicoes.csv` | 23 strong serial-number corrections applied, with the log |
+| `pbit_features_corrigido_v2.csv`, `pbit_reclassificacoes.csv`, `pbit_quarentena.csv` | First condition corrections and three quarantined cycles |
+| `pbit_features_corrigido_v3.csv`, `pbit_reclassificacoes_v3.csv` | **Version used in all experiments**: 1,472 cycles, with the remaining condition corrections |
+| `pbit_spectral_features_v3.csv` | Frequency descriptors of version 3 |
 
-Files derived from these inputs are not distributed and must be regenerated first (see
-*Reproducing the analyses*).
-
-Class labels are those supplied with the records; acquisition dates, the origin of each fault
-(natural or induced) and independent label confirmation were not available. The severity index
-is the authors' mapping, informed by ARP4761A failure-condition categories, and is not a
-validated aircraft-level hazard classification.
+Labels were filled in by hand and have no independent confirmation. Corrections rest on rules defined by the authors and logged cycle by cycle. The severity categories in the article are the authors' working mapping informed by ARP4761A, not an aircraft-level hazard classification.
 
 ## Environment
 
-The analyses were run with Python 3.14.0 on Windows 11. Install the pinned versions with
+The analyses were run with Python 3.14.0 on Windows 11.
 
 ```
-pip install -r requirements_analysis.txt
+pip install -r requirements.txt
 ```
-
-Several experiments are computationally heavy (thousands of model fits); run times range from
-minutes to many hours.
 
 ## Reproducing the analyses
 
-First regenerate the derived data, from the repository root:
+Run everything, from the repository root:
 
-1. Run `notebooks/01_data_inspection.ipynb`, `02_feature_engineering.ipynb` and
-   `03_split_augmentation.ipynb` in order. They write the cleaned long table
-   (`PBIT_atuador_DESCARAC_r1_long_clean.csv`), the 246 descriptors per cycle
-   (`PBIT_features_r1.csv`) and the historical partition (`train_real.csv`, 1,196 cycles from
-   54 units; `test_real.csv`, 292 cycles from 11 units).
-2. Run `python scripts/audit_dataset.py` to write the per-cycle data-quality audit
-   (`audit_dataset_r1.csv`).
+```
+bash scripts/run_all.sh
+```
 
-The cleaned long table is regenerated byte for byte; descriptors and partitions are regenerated
-with the same cycles and units, with numerical differences of at most 2.2e-16 caused by
-floating-point formatting. The remaining notebooks reproduce the original modelling and the
-held-out evaluation; the frozen hyperparameter files in `data/` keep the tuned configurations
-fixed.
+This takes a few hours. It first rebuilds the audited data from the two input files, then runs the experiments in this order:
 
-Scripts are then run from the repository root, for example `python scripts/leakage_stratification.py`.
-Most experiment scripts write their outputs to `data/<experiment>/`; summary scripts read those
-outputs, and table and figure scripts write to `paper/`. Experiment codes (E1–E16) match the
-protocols in `docs/protocolos/`.
-
-| Article content | Scripts |
+| Script (run from `scripts/`) | Purpose |
 |---|---|
-| Data audit, features, partitions, frozen population | `notebooks/01`–`03`, `01_validate_data.py`, `audit_dataset.py`, `population.py`, `freeze_ress_revision.py` |
-| Leakage effect (RQ1) and fixed-model contrast | `leakage_stratification.py`, `leakage_fixed_model.py`, `leakage_summary.py`, `run_e9.py`, `e9_compare.py` |
-| Classifier families | `families_compare.py`, `families_summary.py` |
-| Feature-set ablation and trivial baselines | `ablation_features.py`, `ablation_summary.py`, `paper_extra_accuracy.py` |
-| Imbalance treatment | `imbalance_ablation.py`, `imbalance_summary.py` |
-| Nested tuning, operating point and cost-sensitive comparators | `nested_cv_*.py`, `risk_control.py`, `cost_sensitive.py`, `cost_sensitive_summary.py` |
-| Policies selected on inner data (E1) | `nested_cv_e1.py`, `run_e1_*.py`, `e1_*.py`, `verify_e1_*.py`, `closure_tables.py` |
-| Fault-detection triage (E10) | `e10_*.py` |
-| Diagnosis of the limiting classes (E12) | `e12_*.py` |
-| Quality filtering and numerical-region controls (E13–E16) | `e13_*.py`, `e14_*.py`, `e15_*.py`, `e16_*.py`, `e15_e16_report.py`, `e13_e16_*.py` |
-| Held-out test partition | `notebooks_safety/`, `reanalyze_final_test.py`, `final_test_uncertainty.py`, `fa0_unit_decomposition.py` |
-| Rare-class leave-one-unit-out analysis (E5) | `loso_f06*.py`, `run_e5.py`, `e5_summarize.py` |
-| Risk calibration and unit-evidence requirements | `ress_crc_fixed_model.py`, `crc_repeated_partitions.py`, `verify_crc_repeated_independent.py`, `plot_crc_repeated.py`, `unit_evidence_requirements.py` |
-| Calibration of the inferential procedures (coverage assessments) | `cluster_*.py`, `run_cluster_coverage_parallel.py`, `verify_cluster_coverage.py`, `plot_cluster_coverage.py`, `reanalyze_inference.py` |
-| Audited-population rerun (E7) and SMOTEWB reproduction (E8) | `run_e7.py`, `e7_compare.py`, `e8_smotewb.py`, `e8_summary.py` |
-| Sensitivity to margins, fixed hyperparameters and seeds | `margin_sensitivity.py`, `hyperparameter_sensitivity*.py` |
-| Sensitivity to the set of critical classes (E17) | `e17_severity_sensitivity.py`, `e17_verify.py` (reuse the saved predictions of the experiments above) |
+| `limpar_dados.py`, `auditar_continuidade.py`, `aplicar_reatribuicoes.py`, `gerar_v2.py`, `gerar_v3.py`, `build_spectral_features.py` | Data audit, up to version 3 and its frequency descriptors |
+| `experimentos_base.py` | Baselines and splitting strategies (E0 to E3b) |
+| `experimentos_controles_hierarquia.py`, `calcular_cmr.py` | Leakage controls, hierarchy and critical miss rate |
+| `experimento_s2_ablacao.py`, `analise_s2_regra_nivel.py` | Removal of absolute level; exploratory detector relative to each unit's baseline |
+| `train_binary_model.py` | Normal-versus-failure model, with all failures |
+| `train_binary_model.py --no-f02`, `train_binary_model.py --no-f02 --spectral` | The same without F02, without and with frequency descriptors |
+| `analyze_within_unit.py`, `compare_spectral_gain.py` | Comparison within units; paired gain from frequency descriptors |
+| `analyze_f02_vs_n01.py`, `analyze_f02_100hz.py` | F02 against N01; the second assumes 100 Hz |
+| `evaluate_generalization.py`, `evaluate_label_noise.py` | Failure modes absent from training, training on N01 only, and label errors |
 
-Some verification scripts also hash files of the authors' internal audit trail (manifests and
-records) that are not part of this package; those checks fail on the missing files, which does
-not affect the analyses themselves.
+To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py` and `analyze_f02_100hz.py` were not part of that comparison.
 
-## Citation
+For a quick test, `train_binary_model.py --rapido` writes to `resultados_teste/`.
 
-If you use this package, please cite the article (reference to be added on publication).
+## Tests
 
-## Contact
+```
+python -m unittest discover tests
+```
 
-Antonio Celio Pereira de Mesquita — celio@ita.br — ORCID [0000-0002-3145-9987](https://orcid.org/0000-0002-3145-9987)
+## Scope of the evidence
+
+All data were examined during the audit and there is no external cohort, so the results are internal evidence. F02 was removed from the main model after the results were seen, on the assumption that visual inspection intercepts it; both results are reported. See `docs/acceptance_criteria.md`.
+
+## Citation and contact
+
+Antonio C. P. Mesquita, celio@ita.br. The full citation will be added on publication.

@@ -1,0 +1,4 @@
+experimento_idx,numero_serie,condicao_anterior,condicao_nova,motivo
+994,SN 020,N01,F06,queda a ~0.01 e retorno a 2.29; vizinhos estaveis em 3.048
+997,SN 020,N01,F06,queda a ~0.01 e retorno a 3.05; vizinhos estaveis em 3.048
+1135,SN 049,N01,F06,platô em 1.76 e queda a 0.003 sem retorno

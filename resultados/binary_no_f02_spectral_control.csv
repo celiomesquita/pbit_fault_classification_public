@@ -1,0 +1,2 @@
+real_grouped_auc,null_mean,null_p97_5,p_value,n_permutations,leaky_auc,feature_set,model,params
+0.9491745979552194,0.4843077794153392,0.6366679462086757,0.004975124378109453,200,0.9582561516961693,E,logistic,{'C': 0.01}

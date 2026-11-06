@@ -1,0 +1,13 @@
+log_largest_jump_ratio: -1.0259
+log_sd_ratio: 0.6427
+log_second_half_sd_ratio: 0.4963
+minimum_ratio: -0.2564
+log_first_half_sd_ratio: 0.2293
+half_difference_ratio: 0.1742
+start_end_ratio: -0.1578
+peak_count: -0.1577
+maximum_ratio: 0.1459
+kurtosis: -0.1305
+slope_ratio: -0.1038
+log_peak_to_peak_ratio: 0.0776
+skewness: -0.0151
