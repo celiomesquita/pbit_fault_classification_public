@@ -38,7 +38,7 @@ Model and feature set are chosen inside each outer fold, using inner validation 
 | C5 | Met |
 | C6 | Met for the scripts compared, after a correction to the forest's parallel summation |
 | C7, C12 | Not met |
-| C8 | Met by the point estimate at the 10% and 20% targets (recall gain 0.051 and 0.035), not by the lower interval limit |
+| C8 | Recall condition not met by the lower interval limit (gains 0.051 [0.016; 0.100] and 0.035 [0.014; 0.063] at the 10% and 20% targets; point estimates above 0.03); met through the alternative condition, since at the 20% target only the model with frequency descriptors meets C4 by the upper interval limit |
 | C9 | Met by the point estimate for the procedure selected within each fold (recall 0.873 to 1.000); for F05 the interval reaches 0.745. Also met by the fixed logistic model |
 | C10 | Met at the point estimate; the critical-miss interval reaches 0.083 |
 | C11 | Met by the selected procedure (recall loss 0.008, critical misses 0.028) and by the fixed logistic model; not met by the N01-only detector |
