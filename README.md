@@ -1,6 +1,6 @@
 # Power-on built-in test of airborne actuators: leakage and frequency descriptors
 
-Reproducibility package for the article *Unit-Grouped Evaluation of Airborne Actuator PBIT Fault Classification Under Unseen Failure Modes* (provisional title, under preparation), by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory (AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
+Reproducibility package for the article *Unit-Grouped Evaluation of Airborne Actuator PBIT Fault Detection Under Unseen Units and Failure Modes* (provisional title, under preparation), by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory (AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
 
 The package contains the anonymised dataset, the analysis code, the acceptance criteria, the unit tests, the published result tables and exploratory figure, and a self-contained dashboard. Every table, figure and number in the article can be traced to a script and a result file (`docs/manuscript_reproduction.md`). Manuscript sources are not included.
 
