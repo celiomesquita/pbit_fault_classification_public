@@ -2,7 +2,7 @@
 
 Reproducibility package for the article *From Recognising the Unit to Classifying its Condition: Leakage and Frequency Descriptors in Power-On Built-In Test of Airborne Actuators* (provisional title, under preparation), by Antonio C. P. Mesquita and Guilherme C. Rocha, Aerospace Logistics Engineering Laboratory (AeroLogLab), Instituto Tecnológico de Aeronáutica (ITA), São José dos Campos, Brazil.
 
-The package contains the anonymised dataset, the analysis code, the acceptance criteria, the unit tests and a self-contained dashboard. Manuscript sources are not included.
+The package contains the anonymised dataset, the analysis code, the acceptance criteria, the unit tests, the published result tables and exploratory figure, and a self-contained dashboard. Every table, figure and number in the article can be traced to a script and a result file (`docs/manuscript_reproduction.md`). Manuscript sources are not included.
 
 ## Contents
 
@@ -49,7 +49,7 @@ Run everything, from the repository root:
 bash scripts/run_all.sh
 ```
 
-This takes a few hours. The scripts run in this order:
+This takes a few hours. The scripts run in this order, and several depend on earlier outputs: `evaluate_decision_analysis.py`, `evaluate_robustness_procedure.py` and `compare_xgboost.py` read the held-out predictions of `train_binary_model.py --no-f02 --spectral`, which are regenerated but not versioned.
 
 | Script (run from `scripts/`) | Purpose |
 |---|---|
@@ -68,7 +68,7 @@ This takes a few hours. The scripts run in this order:
 | `evaluate_robustness_procedure.py` | Unseen failure modes, label errors and F02 escape for the procedure selected within each outer fold (set E) |
 | `compare_xgboost.py` | Post-result extension: XGBoost added to the comparison without F02, alone and within the within-fold selection; refits logistic regression to verify the saved predictions before reusing them |
 
-To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py`, `analyze_f02_100hz.py`, `evaluate_decision_analysis.py`, `evaluate_robustness_procedure.py` and `compare_xgboost.py` were not part of that comparison; `tests/test_xgboost_comparison.py` checks that XGBoost fits are deterministic.
+To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py`, `analyze_f02_100hz.py`, `exploratory_analysis.py`, `analyze_f04_f05.py`, `evaluate_decision_analysis.py`, `evaluate_robustness_procedure.py` and `compare_xgboost.py` were not part of that comparison; `tests/test_xgboost_comparison.py` checks that XGBoost fits are deterministic. Results were produced with the versions in `requirements.txt` on Windows 11; other platforms or library versions may change the last digits of tree-based models.
 
 For a quick test, `train_binary_model.py --rapido` writes to `resultados_teste/`.
 
@@ -91,9 +91,11 @@ F02 remains visible in exploration but is excluded from the displayed binary eva
 python -m unittest discover tests
 ```
 
+The tests cover the binary-model pipeline (grouped folds, absence of unit overlap, thresholds from inner validation only), the descriptive figures cited in the exploratory analysis, and the XGBoost comparison (training-only class weights, deterministic fits, paired alignment).
+
 ## Scope of the evidence
 
-The same data guided exploration and evaluation, and there is no external cohort, so the results are internal evidence. F02 was removed from the main model after the results were seen, on the assumption that visual inspection intercepts it; both results are reported. See `docs/acceptance_criteria.md`.
+The same data guided exploration and evaluation, and there is no external cohort, so the results are internal evidence. F02 was removed from the main model after the results were seen, on the assumption that visual inspection intercepts it; both results are reported. Without F02, no threshold meets the false-alarm and critical-miss criteria jointly; the 20% false-alarm target was adopted after the results, on a cost argument (`cost_rstar.csv`) that depends on a cost ratio not measured for any fleet. Item-level decisions approximate removal events by runs of consecutive cycles of one unit and condition, because the chronology of the identifiers is unconfirmed. N02 rests on two units and F04 and F05 on four each, with F04 and F05 on disjoint units and separate blocks of the file, so their separability is not demonstrated. Several analyses were fixed after seeing results and are listed, with their order, in `docs/acceptance_criteria.md`.
 
 ## Citation and contact
 
