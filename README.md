@@ -60,8 +60,9 @@ This takes a few hours. The scripts run in this order:
 | `evaluate_generalization.py`, `evaluate_label_noise.py` | Failure modes absent from training, training on N01 only, and label errors |
 | `evaluate_decision_analysis.py` | Cost of the 10% and 20% false-alarm targets, cost-selected thresholds, item-level decisions and alarm rate by condition at 20% |
 | `evaluate_robustness_procedure.py` | Unseen failure modes, label errors and F02 escape for the procedure selected within each outer fold (set E) |
+| `compare_xgboost.py` | Post-result extension: XGBoost added to the comparison without F02, alone and within the within-fold selection; refits logistic regression to verify the saved predictions before reusing them |
 
-To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py`, `analyze_f02_100hz.py`, `evaluate_decision_analysis.py` and `evaluate_robustness_procedure.py` were not part of that comparison.
+To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py`, `analyze_f02_100hz.py`, `evaluate_decision_analysis.py`, `evaluate_robustness_procedure.py` and `compare_xgboost.py` were not part of that comparison; `tests/test_xgboost_comparison.py` checks that XGBoost fits are deterministic.
 
 For a quick test, `train_binary_model.py --rapido` writes to `resultados_teste/`.
 

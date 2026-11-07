@@ -30,3 +30,6 @@ PYTHON="${PYTHON:-python}"
 # Decision analysis and robustness of the selected procedure (require the predictions of the model without F02)
 "$PYTHON" evaluate_decision_analysis.py
 "$PYTHON" evaluate_robustness_procedure.py
+
+# Post-result XGBoost extension (requires the predictions of the model without F02)
+"$PYTHON" compare_xgboost.py

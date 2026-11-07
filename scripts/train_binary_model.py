@@ -1,8 +1,9 @@
 """Train and evaluate the normal-versus-failure model (plan actions P12 to P14) on data version 3.
 
 The serial number is used only to keep units apart between training and test sets.
-Usage, from scripts/: py train_binary_model.py [--rapido] [--no-f02] [--spectral]. Outputs go to resultados/binary_*
+Usage, from scripts/: py train_binary_model.py [--rapido] [--no-f02] [--spectral] [--xgboost]. Outputs go to resultados/binary_*
 or, with --no-f02, resultados/binary_no_f02_*. --no-f02 assumes that visual inspection removes F02 items before PBIT.
+--xgboost adds a fifth family and appends _xgboost to the output prefix.
 """
 import ast
 import sys
@@ -19,18 +20,23 @@ from sklearn.model_selection import KFold, StratifiedGroupKFold
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.utils.class_weight import compute_sample_weight
+from xgboost import XGBClassifier
 
 import experimentos_base as base
 
 EXCLUDE_F02 = "--no-f02" in sys.argv
 USE_SPECTRAL = "--spectral" in sys.argv
 PREFIX = ("binary_no_f02" if EXCLUDE_F02 else "binary") + ("_spectral" if USE_SPECTRAL else "")
+USE_XGBOOST = "--xgboost" in sys.argv
+if USE_XGBOOST:
+    PREFIX += "_xgboost"
 NORMAL = ("N01", "N02")
 CRITICAL = ("F03", "F06")
 ALPHAS = (0.05, 0.10, 0.20)
 LOG_COLUMNS = ["desvio_padrao", "pico_a_pico", "maior_salto", "desvio_primeira_metade", "desvio_segunda_metade"]
 LEVEL_COLUMNS = ["media", "mediana", "minimo", "maximo", "rms", "valor_inicial", "valor_final", "energia"]
-SIMPLICITY_ORDER = ["tree", "logistic", "forest", "boosting"]
+SIMPLICITY_ORDER = ["tree", "logistic", "forest", "boosting", "xgboost"]
 SET_ORDER = ["D", "B", "A", "E"]
 SIMPLICITY_MARGIN = 0.01
 N_PERMUTATIONS = 3 if base.RAPIDO else 200
@@ -42,6 +48,10 @@ GRIDS = {
     "forest": [{"min_samples_leaf": leaf} for leaf in (1, 3, 5)],
     "boosting": [{"max_depth": depth} for depth in (2, 3, 4)],
 }
+XGBOOST_GRID = [{"max_depth": depth, "reg_lambda": penalty}
+                for depth, penalty in product((2, 3, 4), (1.0, 10.0))]
+if USE_XGBOOST:
+    GRIDS["xgboost"] = XGBOOST_GRID
 if base.RAPIDO:
     GRIDS = {name: grid[:1] for name, grid in GRIDS.items()}
 
@@ -56,6 +66,14 @@ class SequentialPredictForest(RandomForestClassifier):
             return super().predict_proba(X)
         finally:
             self.n_jobs = workers
+
+
+class BalancedXGBClassifier(XGBClassifier):
+    """Recompute balanced sample weights using only the current training partition."""
+
+    def fit(self, X, y, *, sample_weight=None, **kwargs):
+        weights = compute_sample_weight("balanced", y) if sample_weight is None else sample_weight
+        return super().fit(X, y, sample_weight=weights, **kwargs)
 
 
 def make_target(conditions):
@@ -102,13 +120,20 @@ def build_feature_sets(df):
 
 
 def make_model(name, params, seed):
+    if name == "xgboost":
+        return BalancedXGBClassifier(
+            n_estimators=200, learning_rate=0.05, tree_method="hist",
+            objective="binary:logistic", eval_metric="logloss", n_jobs=4,
+            random_state=seed, **params)
     if name == "tree":
         return DecisionTreeClassifier(class_weight="balanced", min_samples_leaf=10, random_state=seed, **params)
     if name == "logistic":
         return make_pipeline(StandardScaler(), LogisticRegression(class_weight="balanced", max_iter=5000, **params))
     if name == "forest":
         return SequentialPredictForest(200, class_weight="balanced_subsample", random_state=seed, n_jobs=-1, **params)
-    return HistGradientBoostingClassifier(class_weight="balanced", early_stopping=False, learning_rate=0.05, max_iter=200, random_state=seed, **params)
+    if name == "boosting":
+        return HistGradientBoostingClassifier(class_weight="balanced", early_stopping=False, learning_rate=0.05, max_iter=200, random_state=seed, **params)
+    raise ValueError(f"Unknown model: {name}")
 
 
 def inner_fit(name, X, y, conditions, groups, seed):
