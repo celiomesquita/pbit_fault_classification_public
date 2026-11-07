@@ -1,31 +1,34 @@
 #!/usr/bin/env bash
-# Plan action P21: run every model script twice and compare CSV and TXT outputs byte by byte.
-# Usage, from scripts/: bash check_reproducibility.sh. Output: resultados/reproducibility.txt.
+# Run the whole analysis chain (run_all.sh) twice and compare every CSV and TXT output byte by byte.
+# Usage, from scripts/: bash check_reproducibility.sh [first|second|compare]. Without an argument, all three phases run.
+# Each phase can be run on its own (for instance in separate sessions): `first` and `second` each take a few hours.
+# Output: resultados/reproducibility.txt. Set PYTHON if the interpreter is not called python.
 set -u
-PYTHON="${PYTHON:-python}"
 cd "$(dirname "$0")"
 RESULTS=../resultados
-PATTERN='binary_*.csv binary_*.txt f02_vs_n01.csv unseen_mode.csv n01_only*.csv f02_escape.csv label_noise.csv'
-
-run_all() {
-  "$PYTHON" train_binary_model.py
-  "$PYTHON" train_binary_model.py --no-f02
-  "$PYTHON" train_binary_model.py --no-f02 --spectral
-  "$PYTHON" analyze_f02_vs_n01.py
-  "$PYTHON" evaluate_generalization.py
-  "$PYTHON" evaluate_label_noise.py
-}
+export PYTHON="${PYTHON:-python}"
 
 hashes() {
-  (cd "$RESULTS" && md5sum $PATTERN)
+  (cd "$RESULTS" && ls *.csv *.txt | grep -v '^reproducibility\.txt$' | xargs md5sum)
 }
 
-run_all > "$RESULTS/execucao_reproducibility_first.log" 2>&1
-hashes > "$RESULTS/.hashes_first.txt"
-run_all > "$RESULTS/execucao_reproducibility_second.log" 2>&1
-hashes > "$RESULTS/.hashes_second.txt"
-{
-  echo "files compared: $(wc -l < "$RESULTS/.hashes_first.txt")"
-  if diff "$RESULTS/.hashes_first.txt" "$RESULTS/.hashes_second.txt"; then echo "IDENTICAL"; else echo "DIFFERENT"; fi
-} > "$RESULTS/reproducibility.txt"
-cat "$RESULTS/reproducibility.txt"
+run_phase() {  # $1 = first | second
+  bash ./run_all.sh > "$RESULTS/execucao_reproducibility_$1.log" 2>&1
+  hashes > "$RESULTS/.hashes_$1.txt"
+}
+
+compare() {
+  {
+    echo "files compared: $(wc -l < "$RESULTS/.hashes_first.txt")"
+    if diff "$RESULTS/.hashes_first.txt" "$RESULTS/.hashes_second.txt"; then echo "IDENTICAL"; else echo "DIFFERENT"; fi
+  } > "$RESULTS/reproducibility.txt"
+  cat "$RESULTS/reproducibility.txt"
+}
+
+case "${1:-all}" in
+  first) run_phase first ;;
+  second) run_phase second ;;
+  compare) compare ;;
+  all) run_phase first; run_phase second; compare ;;
+  *) echo "Usage: bash check_reproducibility.sh [first|second|compare]"; exit 2 ;;
+esac

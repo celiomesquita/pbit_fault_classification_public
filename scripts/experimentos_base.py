@@ -40,9 +40,21 @@ if RAPIDO:
     GRADES = {k: v[:1] for k, v in GRADES.items()}
 
 
+class SequentialPredictForest(RandomForestClassifier):
+    """Fits in parallel but sums tree votes in a fixed order: parallel summation changes the last digits between runs."""
+
+    def predict_proba(self, X):
+        workers = self.n_jobs
+        self.n_jobs = 1
+        try:
+            return super().predict_proba(X)
+        finally:
+            self.n_jobs = workers
+
+
 def novo_modelo(nome, params, semente):
     if nome == "RF":
-        return RandomForestClassifier(n_estimators=200, class_weight="balanced_subsample", random_state=semente, n_jobs=-1, **params)
+        return SequentialPredictForest(n_estimators=200, class_weight="balanced_subsample", random_state=semente, n_jobs=-1, **params)
     return make_pipeline(StandardScaler(), LogisticRegression(class_weight="balanced", max_iter=5000, **params))
 
 

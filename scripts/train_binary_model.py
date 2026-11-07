@@ -56,16 +56,7 @@ if base.RAPIDO:
     GRIDS = {name: grid[:1] for name, grid in GRIDS.items()}
 
 
-class SequentialPredictForest(RandomForestClassifier):
-    """Fits in parallel but sums tree votes in a fixed order: parallel summation changes the last digits between runs."""
-
-    def predict_proba(self, X):
-        workers = self.n_jobs
-        self.n_jobs = 1
-        try:
-            return super().predict_proba(X)
-        finally:
-            self.n_jobs = workers
+SequentialPredictForest = base.SequentialPredictForest
 
 
 class BalancedXGBClassifier(XGBClassifier):

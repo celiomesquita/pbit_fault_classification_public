@@ -130,7 +130,7 @@ def identificar_sn(X, g):
     for rep in range(b.N_REP):
         pred = np.empty(len(g), dtype=object)
         for tr, te in KFold(b.N_FOLD, shuffle=True, random_state=rep).split(X):
-            pred[te] = RandomForestClassifier(200, random_state=rep, n_jobs=-1).fit(X[tr], g[tr]).predict(X[te])
+            pred[te] = b.SequentialPredictForest(200, random_state=rep, n_jobs=-1).fit(X[tr], g[tr]).predict(X[te])
         acc.append((pred == g).mean())
     return np.mean(acc)
 

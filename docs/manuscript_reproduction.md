@@ -74,4 +74,4 @@ Large prediction files (`*predic*.csv`) and `c1_permutacoes.csv` are not version
 
 ## Reproducibility check
 
-`bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their outputs byte by byte; the outcome is written to `resultados/reproducibility.txt`. Results were produced with the versions in `requirements.txt` on Windows 11; other platforms or library versions may change the last digits of tree-based models.
+`bash scripts/check_reproducibility.sh` runs `run_all.sh` twice and compares all 96 CSV and TXT outputs byte by byte (all identical in our run); the outcome is written to `resultados/reproducibility.txt`. Results were produced with the versions in `requirements.txt` on Windows 11; other platforms or library versions may change the last digits of tree-based models.

@@ -40,7 +40,7 @@ def controle_c2(X, g):
     for rep in range(b.N_REP):
         pred = np.empty(len(g), dtype=object)
         for tr, te in KFold(b.N_FOLD, shuffle=True, random_state=rep).split(X):
-            pred[te] = RandomForestClassifier(200, random_state=rep, n_jobs=-1, min_samples_leaf=1).fit(X[tr], g[tr]).predict(X[te])
+            pred[te] = b.SequentialPredictForest(200, random_state=rep, n_jobs=-1, min_samples_leaf=1).fit(X[tr], g[tr]).predict(X[te])
         recs = [(pred[g == u] == u).mean() for u in np.unique(g)]
         linhas.append({"repeticao": rep, "acuracia": (pred == g).mean(), "macro_recall_sn": np.mean(recs),
                        "acuracia_maioria": pd.Series(g).value_counts(normalize=True).iloc[0], "acaso_macro": 1 / len(set(g))})
