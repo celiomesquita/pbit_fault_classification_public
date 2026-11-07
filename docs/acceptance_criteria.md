@@ -33,17 +33,21 @@ Model and feature set are chosen inside each outer fold, using inner validation 
 | ID | Outcome |
 |---|---|
 | C1, C2 | Met, with and without F02 |
-| C3 | Not met with all failures (recall 0.514). Met without F02 at the default threshold |
-| C4 | Not met with all failures (0.236). Without F02 and with frequency: 0.047 at the 10% target, with an actual false-alarm rate of 0.105; 0.020 at the 20% target, whose false-alarm rate of 0.199 exceeds the C3 ceiling |
+| C3 | Not met with all failures (recall 0.514). Met without F02 at the default threshold, where C4 is not met |
+| C4 | Not met with all failures (0.236). Without F02 and with frequency: 0.047 [0.012; 0.076] at the 10% target, with an actual false-alarm rate of 0.105; 0.020 [0.001; 0.045] at the 20% target, whose false-alarm rate of 0.199 exceeds the C3 ceiling. No threshold meets C3 and C4 jointly |
 | C5 | Met |
 | C6 | Met for the scripts compared, after a correction to the forest's parallel summation |
 | C7, C12 | Not met |
-| C8, C9 | Met |
+| C8 | Met by the point estimate at the 10% and 20% targets (recall gain 0.051 and 0.035), not by the lower interval limit |
+| C9 | Met by the point estimate for the procedure selected within each fold (recall 0.873 to 1.000); for F05 the interval reaches 0.745. Also met by the fixed logistic model |
 | C10 | Met at the point estimate; the critical-miss interval reaches 0.083 |
-| C11 | Met by the supervised model; not met by the N01-only detector |
+| C11 | Met by the selected procedure (recall loss 0.008, critical misses 0.028) and by the fixed logistic model; not met by the N01-only detector |
 
 ## Amendments after seeing results
 
 - **Removal of F02.** Decided after seeing that F02 caused the rejection under C3 and C4, on the assumption that visual inspection intercepts foreign objects. That assumption was not tested. Results with and without F02 are both reported.
 - **Operating point.** The 20% target was adopted after results, because of the cost of a failure reaching stock. It does not meet the C3 ceiling.
+- **Reading of C4.** The criteria did not state whether limits apply to point estimates or interval limits. After results, the upper limit of the 95% interval was adopted as the conservative reading; both are reported.
+- **Cost and item-level analyses.** Fixed after results and before execution: the cost ratio above which the 20% target costs less than the 10% target (3.1 [1.3; 11.5]), thresholds minimising cost on inner validation, and item-level decisions (runs of consecutive cycles of one unit and condition; median and majority rules only). They justify, but do not validate, the adopted operating point.
+- **Robustness of the selected procedure.** C9 and C11 were first evaluated with logistic regression fixed at C = 0.01. They were repeated with the procedure selected within each outer fold, restricted to set E for computational feasibility; the fixed-model results are kept as a sensitivity analysis.
 - **Earlier leakage and hierarchy experiments.** These used a pre-specified protocol with a relevance margin of 0.03, but not the table above.

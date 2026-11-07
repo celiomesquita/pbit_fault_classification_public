@@ -26,3 +26,7 @@ PYTHON="${PYTHON:-python}"
 "$PYTHON" analyze_f02_100hz.py
 "$PYTHON" evaluate_generalization.py
 "$PYTHON" evaluate_label_noise.py
+
+# Decision analysis and robustness of the selected procedure (require the predictions of the model without F02)
+"$PYTHON" evaluate_decision_analysis.py
+"$PYTHON" evaluate_robustness_procedure.py

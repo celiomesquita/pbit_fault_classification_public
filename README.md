@@ -58,8 +58,10 @@ This takes a few hours. The scripts run in this order:
 | `analyze_within_unit.py`, `compare_spectral_gain.py` | Comparison within units; paired gain from frequency descriptors |
 | `analyze_f02_vs_n01.py`, `analyze_f02_100hz.py` | F02 against N01; the second assumes 100 Hz |
 | `evaluate_generalization.py`, `evaluate_label_noise.py` | Failure modes absent from training, training on N01 only, and label errors |
+| `evaluate_decision_analysis.py` | Cost of the 10% and 20% false-alarm targets, cost-selected thresholds, item-level decisions and alarm rate by condition at 20% |
+| `evaluate_robustness_procedure.py` | Unseen failure modes, label errors and F02 escape for the procedure selected within each outer fold (set E) |
 
-To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py` and `analyze_f02_100hz.py` were not part of that comparison.
+To check determinism, `bash scripts/check_reproducibility.sh` runs the model scripts twice and compares their CSV and TXT outputs byte by byte. In our run, the 38 files compared were identical. `experimentos_base.py`, `experimentos_controles_hierarquia.py`, `experimento_s2_ablacao.py`, `analyze_f02_100hz.py`, `evaluate_decision_analysis.py` and `evaluate_robustness_procedure.py` were not part of that comparison.
 
 For a quick test, `train_binary_model.py --rapido` writes to `resultados_teste/`.
 
