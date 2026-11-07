@@ -14,6 +14,8 @@ The package contains the anonymised dataset, the analysis code, the acceptance c
 | `dashboard/index.html` | Offline interactive exploration and grouped-validation evidence |
 | `resultados/` | Published result tables, for comparison with a new run |
 | `docs/acceptance_criteria.md` | Acceptance criteria fixed before each experiment, and what was amended afterwards |
+| `docs/manuscript_reproduction.md` | Which script and result file produce each table, figure and number of the article |
+| `figures/` | Exploratory figure, for comparison with a new run |
 
 Older scripts and file names are in Portuguese (`dados` means data, `resultados` means results); newer code is in English.
 
@@ -39,6 +41,8 @@ pip install -r requirements.txt
 
 ## Reproducing the analyses
 
+Every table, figure and number in the article can be regenerated from this package; `docs/manuscript_reproduction.md` maps each of them to its script and result file.
+
 Run everything, from the repository root:
 
 ```
@@ -50,9 +54,11 @@ This takes a few hours. The scripts run in this order:
 | Script (run from `scripts/`) | Purpose |
 |---|---|
 | `build_spectral_features.py` | Frequency descriptors |
+| `exploratory_analysis.py` | Unit coverage, signal level, low-frequency content, feature identities and the exploratory figure |
 | `experimentos_base.py` | Baselines and splitting strategies (E0 to E3b) |
 | `experimentos_controles_hierarquia.py`, `calcular_cmr.py` | Leakage controls, hierarchy and critical miss rate |
 | `experimento_s2_ablacao.py`, `analise_s2_regra_nivel.py` | Removal of absolute level; exploratory detector relative to each unit's baseline |
+| `analyze_f04_f05.py` | Exact test of F04 against F05 over all assignments of their eight units |
 | `train_binary_model.py` | Normal-versus-failure model, with all failures |
 | `train_binary_model.py --no-f02`, `train_binary_model.py --no-f02 --spectral` | The same without F02, without and with frequency descriptors |
 | `analyze_within_unit.py`, `compare_spectral_gain.py` | Comparison within units; paired gain from frequency descriptors |

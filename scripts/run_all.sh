@@ -6,6 +6,7 @@ cd "$(dirname "$0")"
 PYTHON="${PYTHON:-python}"
 
 "$PYTHON" build_spectral_features.py
+"$PYTHON" exploratory_analysis.py
 
 # Leakage, controls, hierarchy and feature removal
 "$PYTHON" experimentos_base.py
@@ -13,6 +14,7 @@ PYTHON="${PYTHON:-python}"
 "$PYTHON" calcular_cmr.py
 "$PYTHON" experimento_s2_ablacao.py
 "$PYTHON" analise_s2_regra_nivel.py
+"$PYTHON" analyze_f04_f05.py
 
 # Normal-versus-failure models
 "$PYTHON" train_binary_model.py
