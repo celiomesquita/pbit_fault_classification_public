@@ -63,7 +63,7 @@ Large prediction files (`*predic*.csv`) and `c1_permutacoes.csv` are not version
 |---|---|---|
 | Unseen failure modes (procedure; fixed logistic regression as sensitivity) | `evaluate_robustness_procedure.py`; `evaluate_generalization.py` | `procedure_unseen_mode.csv`; `unseen_mode.csv` |
 | Detector trained on N01 only | `evaluate_generalization.py` | `n01_only.csv`, `n01_only_alarm_rate_by_condition_at_20.csv` |
-| Training-label errors (procedure; fixed logistic regression; N01 only) | `evaluate_robustness_procedure.py`; `evaluate_label_noise.py` | `procedure_label_noise.csv`; `label_noise.csv` |
+| Training-label errors (procedure; fixed logistic regression; N01 only) | `evaluate_robustness_procedure.py`; `evaluate_label_noise.py` | `procedure_label_noise.csv`; `label_noise.csv` (the 0% rows of the procedure and the N01-only detector repeat `binary_no_f02_spectral_results.csv` and `n01_only.csv`) |
 | F02 escaping inspection | `evaluate_robustness_procedure.py`; `evaluate_generalization.py` | `procedure_f02_escape.csv`; `f02_escape.csv` |
 
 ## Exploratory unit-specific reference
